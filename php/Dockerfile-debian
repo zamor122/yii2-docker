@@ -86,7 +86,7 @@ ENV PHP_USER_ID=33 \
     COMPOSER_ALLOW_SUPERUSER=1
 
 # Add configuration files
-COPY image-files/ /
+COPY /php/image-files/ /
 
 # Add GITHUB_API_TOKEN support for composer
 RUN chmod 700 \
@@ -94,10 +94,9 @@ RUN chmod 700 \
         /usr/local/bin/composer
 
 # Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- \
-        --filename=composer.phar \
-        --install-dir=/usr/local/bin && \
-    composer clear-cache
+RUN curl -s https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+RUN composer clear-cache
 
 # Install composer plugins
 RUN composer global require --optimize-autoloader \
@@ -114,5 +113,4 @@ RUN if command -v a2enmod >/dev/null 2>&1; then \
 RUN curl -L https://raw.githubusercontent.com/yiisoft/yii2/master/contrib/completion/bash/yii \
         -o /etc/bash_completion.d/yii
 
-# Application environment
-WORKDIR /app
+COPY /h10-backoffice/yii-application /app/web/

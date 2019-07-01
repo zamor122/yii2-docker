@@ -3,8 +3,8 @@ services:
 
   php:
     build:
-      dockerfile: Dockerfile-${DOCKERFILE_FLAVOUR}
-      context: 'php'
+      dockerfile: ./php/Dockerfile-${DOCKERFILE_FLAVOUR}
+      context: .
       args:
         - PHP_BASE_IMAGE_VERSION=${PHP_BASE_IMAGE_VERSION}
     image: ${PHP_IMAGE_NAME}:${PHP_BASE_IMAGE_VERSION}${PHP_IMAGE_VERSION_SUFFIX}
@@ -13,10 +13,4 @@ services:
       - PHP_ENABLE_XDEBUG
       - TEST_RUNTIME_PATH=/tmp/runtime
     volumes:
-      - ./tests:/tests:delegated
-      # Framework testing
-      - ./_host-volumes/yii2:/yii2:delegated
-      # Application testing
-      - ./_host-volumes/app:/app:delegated
-      # Composer cache
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+     - ./h10-backoffice/yii-application/
